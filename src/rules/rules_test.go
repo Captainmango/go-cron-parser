@@ -71,6 +71,6 @@ func compareSlices(t testing.TB, s1, s2 []int) {
 	t.Helper()
 
 	if !reflect.DeepEqual(s1, s2) {
-		t.Errorf("arrays are not equal. Wanted %v \n Got %v", s1, s2)
+		t.Errorf("slices are not equal. Wanted %v \n Got %v", s1, s2)
 	}
 }
