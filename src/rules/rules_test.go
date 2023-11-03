@@ -40,6 +40,15 @@ func TestDivisorRule(t *testing.T) {
 	})
 }
 
+func TestAllRule(t *testing.T) {
+	t.Run("prints all numbers for interval", func(t *testing.T) {
+		want := []int{1,2,3,4,5,6,7}
+		got := rules.All(src.DAY_OF_WEEK)
+
+		compareSlices(t, want, got)
+	})
+}
+
 func compareSlices(t testing.TB, s1, s2 []int) {
 	t.Helper()
 

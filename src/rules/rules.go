@@ -26,10 +26,23 @@ func Divisor(num int, interval src.CronInterval) []int {
 		return output
 	}
 
-	for i := start; i < limit; i++ {
+	for i := start; i <= limit; i++ {
 		if i%num == 0 {
 			output = append(output, i)
 		}
+	}
+
+	return output
+}
+
+func All(interval src.CronInterval) []int {
+	output := []int{}
+
+	start := getStart(interval)
+	limit := getLimit(interval)
+
+	for i:= start; i <= limit; i++ {
+		output = append(output, i)
 	}
 
 	return output
