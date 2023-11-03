@@ -2,7 +2,7 @@ package rules
 
 import "github.com/captainmango/go-cron-parser/src"
 
-func List(start, end int, interval src.CronInterval) []int {
+func Range(start, end int, interval src.CronInterval) []int {
 	output := []int{}
 
 	if start > end {
@@ -41,11 +41,36 @@ func All(interval src.CronInterval) []int {
 	start := getStart(interval)
 	limit := getLimit(interval)
 
-	for i:= start; i <= limit; i++ {
+	for i := start; i <= limit; i++ {
 		output = append(output, i)
 	}
 
 	return output
+}
+
+func List(nums []int, interval src.CronInterval) []int {
+	output := []int{}
+	limit := getLimit(interval)
+	start := getStart(interval)
+
+	for _, num := range nums {
+		if num <= limit && num >= start {
+			output = append(output, num)
+		}
+	}
+
+	return output
+}
+
+func Single(num int, interval src.CronInterval) []int {
+	limit := getLimit(interval)
+	start := getStart(interval)
+
+	if num > limit || num < start {
+		return []int{}
+	}
+	
+	return []int{num}
 }
 
 func getStart(interval src.CronInterval) int {
