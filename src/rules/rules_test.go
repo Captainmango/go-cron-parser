@@ -1,23 +1,24 @@
-package src_test
+package rules_test
 
 import (
 	"reflect"
 	"testing"
 
+	"github.com/captainmango/go-cron-parser/src/rules"
 	"github.com/captainmango/go-cron-parser/src"
 )
 
 func TestListRule(t *testing.T) {
 	t.Run("it can process a list of numbers", func(t *testing.T) {
 		want := []int{1,2,3,4,5}
-		got := src.List(1, 5, src.MINUTE)
+		got := rules.List(1, 5, src.MINUTE)
 
 		compareSlices(t, want, got)
 	})
 
 	t.Run("it returns empty slice if numbers don't follow in series", func(t *testing.T) {
 		want := []int{}
-		got := src.List(5, 1, src.MINUTE)
+		got := rules.List(5, 1, src.MINUTE)
 
 		compareSlices(t, want, got)
 	})
@@ -26,7 +27,14 @@ func TestListRule(t *testing.T) {
 func TestDivisorRule(t *testing.T) {
 	t.Run("it can process a divisor rule", func(t *testing.T) {
 		want := []int{0,15,30,45}
-		got := src.Divisor(15, src.MINUTE)
+		got := rules.Divisor(15, src.MINUTE)
+
+		compareSlices(t, want, got)
+	})
+
+	t.Run("it doesn't break if divisor doesn't fit in interval", func(t *testing.T) {
+		want := []int{}
+		got := rules.Divisor(88, src.HOUR)
 
 		compareSlices(t, want, got)
 	})
