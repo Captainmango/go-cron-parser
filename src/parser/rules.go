@@ -18,13 +18,13 @@ func process(input string, interval shared.CronInterval) ([]int, error) {
 	rule, inputNums, err := getRuleAndInput(input)
 
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
 
 	output, err := rule(inputNums, interval)
 
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
 
 	return output, nil

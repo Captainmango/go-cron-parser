@@ -18,12 +18,14 @@ func main() {
 
 	if err != nil {
 		fmt.Printf("Encountered error creating cron: %s", err)
+		return
 	}
 
 	parsedCron, err := parser.Parse(cron)
 
 	if err != nil {
 		fmt.Printf("Encountered error parsing cron: %s", err)
+		return
 	}
 
 	printer.Print(parsedCron, os.Stdout)
