@@ -1,9 +1,35 @@
 package parser
 
-import "github.com/captainmango/go-cron-parser/src"
+import (
+	"fmt"
+	"regexp"
+	"strconv"
 
-func rangeRule(start, end int, interval src.CronInterval) []int {
+	"github.com/captainmango/go-cron-parser/src/shared"
+)
+
+var listPattern = `[0-9]+,[0-9]+`
+var divisorPattern = `\*\/[0-9]+`
+var wildcardPattern = `\*`
+var rangePattern = `[0-9]+-[0-9]+`
+var singlePattern = `[0-9]+`
+
+func process(input string, interval shared.CronInterval) []int {
+	rule, inputNums, err := getRuleAndInput(input)
+
+	if err != nil {
+		panic(err)
+	}
+
+	output := rule(inputNums, interval)
+
+	return output
+}
+
+func rangeRule(nums []int, interval shared.CronInterval) []int {
 	output := []int{}
+	start := nums[0]
+	end := nums[1]
 
 	if start > end {
 		return output
@@ -16,18 +42,18 @@ func rangeRule(start, end int, interval src.CronInterval) []int {
 	return output
 }
 
-func divisorRule(num int, interval src.CronInterval) []int {
+func divisorRule(num []int, interval shared.CronInterval) []int {
 	output := []int{}
 
 	start := getStart(interval)
 	limit := getLimit(interval)
 
-	if num > limit {
+	if num[0] > limit {
 		return output
 	}
 
 	for i := start; i <= limit; i++ {
-		if i%num == 0 {
+		if i%num[0] == 0 {
 			output = append(output, i)
 		}
 	}
@@ -35,7 +61,7 @@ func divisorRule(num int, interval src.CronInterval) []int {
 	return output
 }
 
-func wildcardRule(interval src.CronInterval) []int {
+func wildcardRule(_nums []int, interval shared.CronInterval) []int {
 	output := []int{}
 
 	start := getStart(interval)
@@ -48,7 +74,7 @@ func wildcardRule(interval src.CronInterval) []int {
 	return output
 }
 
-func listRule(nums []int, interval src.CronInterval) []int {
+func listRule(nums []int, interval shared.CronInterval) []int {
 	output := []int{}
 	limit := getLimit(interval)
 	start := getStart(interval)
@@ -62,28 +88,65 @@ func listRule(nums []int, interval src.CronInterval) []int {
 	return output
 }
 
-func singleRule(num int, interval src.CronInterval) []int {
+func singleRule(num []int, interval shared.CronInterval) []int {
 	limit := getLimit(interval)
 	start := getStart(interval)
 
-	if num > limit || num < start {
+	val := num[0]
+
+	if val > limit || val < start {
 		return []int{}
 	}
-	
-	return []int{num}
+
+	return []int{val}
 }
 
-func getStart(interval src.CronInterval) int {
+func getRuleAndInput(input string) (RuleFunc, []int, error) {
+	patterns := map[string]RuleFunc{
+		listPattern: listRule,
+		divisorPattern: divisorRule,
+		rangePattern: rangeRule,
+		singlePattern: singleRule,
+		wildcardPattern: wildcardRule,
+	}
+
+	for pattern, rule := range patterns {
+		result, _ := regexp.MatchString(pattern, input)
+
+		if result {
+			re := regexp.MustCompile("[0-9]+")
+			res := re.FindAllString(input, -1)
+
+			output := []int{}
+
+			for _, str := range res {
+				num, err := strconv.Atoi(str)
+
+				if err != nil {
+					return nil, nil, fmt.Errorf("failed to convert value %s to integer", str)
+				}
+
+				output = append(output, num)
+			}
+
+			return rule, output, nil
+		}
+	}
+
+	return nil, nil, fmt.Errorf("unable to find rule for input %s", input)
+}
+
+func getStart(interval shared.CronInterval) int {
 	switch interval {
-	case src.MINUTE:
-		return src.TIME_MIN
-	case src.HOUR:
-		return src.TIME_MIN
+	case shared.MINUTE:
+		return shared.TIME_MIN
+	case shared.HOUR:
+		return shared.TIME_MIN
 	default:
-		return src.CAL_MIN
+		return shared.CAL_MIN
 	}
 }
 
-func getLimit(interval src.CronInterval) int {
-	return src.INTERVAL_MAX_VALUES[interval]
+func getLimit(interval shared.CronInterval) int {
+	return shared.INTERVAL_MAX_VALUES[interval]
 }
