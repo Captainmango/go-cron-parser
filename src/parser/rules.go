@@ -1,4 +1,4 @@
-package rules
+package parser
 
 import "github.com/captainmango/go-cron-parser/src"
 
