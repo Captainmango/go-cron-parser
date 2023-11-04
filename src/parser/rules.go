@@ -9,10 +9,10 @@ import (
 )
 
 var listPattern = `[0-9]+,[0-9]+`
-var divisorPattern = `\*\/[0-9]+`
-var wildcardPattern = `\*`
-var rangePattern = `[0-9]+-[0-9]+`
-var singlePattern = `[0-9]+`
+var divisorPattern = `^\*\/[0-9]+$`
+var wildcardPattern = `^\*$`
+var rangePattern = `^[0-9]+-[0-9]+$`
+var singlePattern = `^[0-9]+$`
 
 func process(input string, interval shared.CronInterval) []int {
 	rule, inputNums, err := getRuleAndInput(input)

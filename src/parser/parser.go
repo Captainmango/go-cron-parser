@@ -26,3 +26,7 @@ func (c CronParser) Parse(cron shared.Cron) shared.ParsedCron {
 
 	return output
 }
+
+func NewParser() CronParser {
+	return CronParser{}
+}
