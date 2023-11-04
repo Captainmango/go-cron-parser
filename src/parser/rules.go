@@ -2,7 +2,7 @@ package parser
 
 import "github.com/captainmango/go-cron-parser/src"
 
-func Range(start, end int, interval src.CronInterval) []int {
+func rangeRule(start, end int, interval src.CronInterval) []int {
 	output := []int{}
 
 	if start > end {
@@ -16,7 +16,7 @@ func Range(start, end int, interval src.CronInterval) []int {
 	return output
 }
 
-func Divisor(num int, interval src.CronInterval) []int {
+func divisorRule(num int, interval src.CronInterval) []int {
 	output := []int{}
 
 	start := getStart(interval)
@@ -35,7 +35,7 @@ func Divisor(num int, interval src.CronInterval) []int {
 	return output
 }
 
-func All(interval src.CronInterval) []int {
+func wildcardRule(interval src.CronInterval) []int {
 	output := []int{}
 
 	start := getStart(interval)
@@ -48,7 +48,7 @@ func All(interval src.CronInterval) []int {
 	return output
 }
 
-func List(nums []int, interval src.CronInterval) []int {
+func listRule(nums []int, interval src.CronInterval) []int {
 	output := []int{}
 	limit := getLimit(interval)
 	start := getStart(interval)
@@ -62,7 +62,7 @@ func List(nums []int, interval src.CronInterval) []int {
 	return output
 }
 
-func Single(num int, interval src.CronInterval) []int {
+func singleRule(num int, interval src.CronInterval) []int {
 	limit := getLimit(interval)
 	start := getStart(interval)
 
