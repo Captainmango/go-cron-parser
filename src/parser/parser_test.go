@@ -20,9 +20,19 @@ func TestParser(t *testing.T) {
 		want := shared.ParsedCron{
 			shared.DAY_OF_WEEK: []int{1}, 
 		}
-		got := parser.Parse(cron)
+		got, _ := parser.Parse(cron)
 
 		compareCrons(t, want, got)
+	})
+
+	t.Run("it can return errors", func(t *testing.T) {
+		cron := shared.Cron{
+			shared.DAY_OF_WEEK: "99",
+		}
+
+		_, err := parser.Parse(cron)
+
+		checkError(t, err)
 	})
 
 	testCases := []struct{
@@ -59,7 +69,7 @@ func TestParser(t *testing.T) {
 
 	for _, testCase := range testCases {
 		t.Run(fmt.Sprintf("it correctly parse a %s", testCase.desc), func(t *testing.T) {
-			got := parser.Parse(testCase.input)
+			got, _ := parser.Parse(testCase.input)
 			want := testCase.output
 
 			compareCrons(t, got, want)
@@ -73,5 +83,13 @@ func compareCrons(t testing.TB, want, got shared.ParsedCron) {
 
 	if !reflect.DeepEqual(want, got) {
 		t.Errorf("cron did not parse correctly. got %v, want %v", got, want)
+	}
+}
+
+func checkError(t testing.TB, err error) {
+	t.Helper()
+
+	if err == nil {
+		t.Error("encountered error when none was expected.")
 	}
 }
