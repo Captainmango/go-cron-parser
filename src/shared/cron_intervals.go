@@ -20,3 +20,11 @@ var INTERVAL_MAX_VALUES = map[CronInterval]int{
 	MONTH:        12,
 	DAY_OF_WEEK:  7,
 }
+
+var INTERVAL_NAMES = map[CronInterval]string{
+	MINUTE:       "minute",
+	HOUR:         "hour",
+	DAY_OF_MONTH: "day_of_month",
+	MONTH:        "month",
+	DAY_OF_WEEK:  "day_of_week",
+}
