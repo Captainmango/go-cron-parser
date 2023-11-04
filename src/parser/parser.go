@@ -8,6 +8,10 @@ type CronParserInterface interface {
 
 type CronParserFunc func(cron shared.Cron) shared.ParsedCron
 
+func (cf CronParserFunc) Parse(cron shared.Cron) shared.ParsedCron {
+	return cf(cron)
+}
+
 type RuleFunc func(input []int, interval shared.CronInterval) []int
 
 type CronParser struct {}

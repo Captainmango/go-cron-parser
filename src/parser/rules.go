@@ -114,19 +114,10 @@ func getRuleAndInput(input string) (RuleFunc, []int, error) {
 		result, _ := regexp.MatchString(pattern, input)
 
 		if result {
-			re := regexp.MustCompile("[0-9]+")
-			res := re.FindAllString(input, -1)
+			output, err := getInput(input)
 
-			output := []int{}
-
-			for _, str := range res {
-				num, err := strconv.Atoi(str)
-
-				if err != nil {
-					return nil, nil, fmt.Errorf("failed to convert value %s to integer", str)
-				}
-
-				output = append(output, num)
+			if err != nil {
+				return nil, nil, err
 			}
 
 			return rule, output, nil
@@ -134,6 +125,25 @@ func getRuleAndInput(input string) (RuleFunc, []int, error) {
 	}
 
 	return nil, nil, fmt.Errorf("unable to find rule for input %s", input)
+}
+
+func getInput(input string) ([]int, error) {
+	re := regexp.MustCompile("[0-9]+")
+	res := re.FindAllString(input, -1)
+
+	output := []int{}
+
+	for _, str := range res {
+		num, err := strconv.Atoi(str)
+
+		if err != nil {
+			return nil, fmt.Errorf("failed to convert value %s to integer", str)
+		}
+
+		output = append(output, num)
+	}
+
+	return output, nil
 }
 
 func getStart(interval shared.CronInterval) int {
