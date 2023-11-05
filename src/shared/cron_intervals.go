@@ -28,3 +28,11 @@ var INTERVAL_NAMES = map[CronInterval]string{
 	MONTH:        "month",
 	DAY_OF_WEEK:  "day_of_week",
 }
+
+var CronIntervalOrder = []CronInterval {
+	MINUTE,
+	HOUR,
+	DAY_OF_MONTH,
+	MONTH,
+	DAY_OF_WEEK,
+}

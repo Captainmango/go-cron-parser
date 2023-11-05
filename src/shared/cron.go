@@ -2,14 +2,6 @@ package shared
 
 import "fmt"
 
-var cronIntervalOrder = []CronInterval {
-	MINUTE,
-	HOUR,
-	DAY_OF_MONTH,
-	MONTH,
-	DAY_OF_WEEK,
-}
-
 func NewCronFromArgs(input []string) (Cron, error) {
 	inputLength := len(input)
 
@@ -21,7 +13,7 @@ func NewCronFromArgs(input []string) (Cron, error) {
 	cron := Cron{}
 
 	for i, str := range cronArgs {
-		cron[cronIntervalOrder[i]] = str
+		cron[CronIntervalOrder[i]] = str
 	}
 
 	return cron, nil

@@ -14,8 +14,8 @@ type CronPrinterInterface interface {
 type CronPrinter struct {}
 
 func (c CronPrinter) Print(parsedCron shared.ParsedCron, w io.Writer) {
-	for interval, values := range parsedCron {
-		lineContent := fmt.Sprintf("%15s | %v \n", getIntervalName(interval), values)
+	for _, interval := range shared.CronIntervalOrder {
+		lineContent := fmt.Sprintf("%15s | %v \n", getIntervalName(interval), parsedCron[interval])
 		w.Write([]byte(lineContent))
 	}
 }
