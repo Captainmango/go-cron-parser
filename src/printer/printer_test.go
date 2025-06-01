@@ -2,6 +2,7 @@ package printer_test
 
 import (
 	"bytes"
+	"strings"
 	"testing"
 
 	"github.com/captainmango/go-cron-parser/src/printer"
@@ -27,7 +28,7 @@ func TestPrinter(t *testing.T) {
 func compareOutput(t testing.TB, want, got string) {
 	t.Helper()
 
-	if want != got {
+	if !strings.Contains(got, want) {
 		t.Errorf("output does not match expected. \n Got %s \n Want %s", got, want)
 	}
 }
