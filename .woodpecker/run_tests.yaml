@@ -1,0 +1,9 @@
+when:
+  - event: push
+    branch: main
+
+steps:
+  - name: tests
+    image: golang:1.20
+    commands:
+      - go test
