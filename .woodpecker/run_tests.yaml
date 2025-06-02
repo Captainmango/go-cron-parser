@@ -5,8 +5,6 @@ when:
 steps:
   - name: tests
     image: golang:1.20
-    volumes:
-      - woodpecker_cache:woodpecker/src
     commands:
       - go mod tidy
       - go test ./...
